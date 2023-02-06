@@ -9,14 +9,20 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.zak</groupId>
-	<artifactId>tech-intro</artifactId>
+	<artifactId>techintro</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>tech-intro</name>
-	<description>Tech intro project</description>
+	<name>techintro</name>
+	<description>Tech Intro project</description>
 	<properties>
 		<java.version>19</java.version>
 	</properties>
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>javax.persistence-api</artifactId>
+			<version>2.2</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -29,7 +35,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons-core</artifactId>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
