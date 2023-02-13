@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "./src",
+    "allowJs": true,
+    "target": "es5",
+    "module": "es2022",
+    "moduleResolution": "Node",
+    "esModuleInterop": true
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
