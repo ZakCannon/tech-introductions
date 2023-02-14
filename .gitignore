@@ -52,3 +52,4 @@ tech-intro/.nb-gradle/
 tech-intro/build/
 tech-intro/!**/src/main/**/build/
 tech-intro/!**/src/test/**/build/
+techintro/target/*
