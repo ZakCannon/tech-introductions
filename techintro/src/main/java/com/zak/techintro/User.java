@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.Objects;
+
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
     @Id
@@ -37,5 +39,15 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.name, this.email);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + this.id + ", name='" + this.name + '\'' + ", email='" + this.email + '\'' + '}';
     }
 }
