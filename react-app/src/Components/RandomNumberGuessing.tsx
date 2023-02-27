@@ -30,7 +30,9 @@ function RandomNumberGuessing(props: IRandomNumberGuessingProps): JSX.Element {
             if (guessedNumber! > 100) {
                 setTooLarge(true)
             }
-            props.setIsCorrect(randNumber! < guessedNumber!)
+            const maxOfRange = randNumber! + 10
+            const minOfRange = randNumber! - 10
+            props.setIsCorrect(minOfRange < guessedNumber! && guessedNumber! < maxOfRange)
             props.handleLogResult(props.isCorrect, isTooLarge)
         }
     }, [randNumber])
@@ -51,30 +53,35 @@ function RandomNumberGuessing(props: IRandomNumberGuessingProps): JSX.Element {
     </div>
 
     return (
-        <div>
-            <div>
-                <label className="form-label">Guess</label>
-                <input className="input-group-text"
-                       type="number"
-                       min="0"
-                       max="100"
-                       id="user-guess"
-                       value={guessedNumber!}
-                       onChange={e => (setGuessedNumber(+e.target.value))}/>
+        <div className="container">
+            <div className="row-cols-1">
+                <div className="col d-flex justify-content-center">
+                    <label className="form-label">Guess</label>
+                </div>
+                <div className="col d-flex justify-content-center">
+                        <input className="input-group-text m-1"
+                               min="0"
+                               max="100"
+                               id="user-guess"
+                               value={guessedNumber!}
+                               onChange={e => (setGuessedNumber(+e.target.value))}/>
+                </div>
+                <div className="col d-flex justify-content-center">
+                    <button className="btn btn-primary" onClick={handleFormSubmit}>Submit</button>
+                </div>
+                <div className="col d-flex justify-content-center">
+                    {randNumber}
+                </div>
+                <div className="col d-flex justify-content-center">
+                    {hasGuessed ?
+                        !isTooLarge ?
+                            props.isCorrect ?
+                                correctGuessResult :
+                                incorrectGuessResult
+                            : tooLargeGuessResult
+                        : null}
+                </div>
             </div>
-            <div>
-                <button className="btn btn-primary" onClick={handleFormSubmit}>Submit</button>
-            </div>
-            <p>
-                {randNumber}
-            </p>
-            {hasGuessed ?
-                !isTooLarge ?
-                    props.isCorrect ?
-                        correctGuessResult :
-                        incorrectGuessResult
-                    : tooLargeGuessResult
-                : null}
         </div>
     );
 }

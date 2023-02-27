@@ -1,23 +1,21 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
+import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
 import './App.css';
-import RandomNumberGuessing from "./form";
-import axios from "axios";
+import AppNavBar from "./Components/AppNavBar";
+import HomePage from "./Pages/HomePage";
+import LoginPage from "./Pages/LoginPage";
+import SignupPage from "./Pages/SignupPage";
 
 function App(): JSX.Element {
-    const [isCorrect, setIsCorrect] = useState(false)
-
-    const handleLogResult = async () => {
-        const request = await axios.get("http://localhost:8080/")
-        console.log(request)
-    }
-
-    return <div className="App">
-        <header className="App-header">
-        <h1>Guess a number you fool</h1>
-        <RandomNumberGuessing isCorrect={isCorrect} setIsCorrect={setIsCorrect} handleLogResult={handleLogResult}/>
-        </header>
-    </div>
+    return <Router>
+        <AppNavBar/>
+        <Routes>
+            <Route path="/" element={<HomePage/>}/>
+            <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/signup" element={<SignupPage/>}/>
+        </Routes>
+    </Router>
 }
 
 export default App;
