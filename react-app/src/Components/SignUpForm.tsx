@@ -1,7 +1,10 @@
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
+import User from "../Services/User";
+import ILogInProps from "../Interfaces/ILogInProps";
 
-function SignUpForm(): JSX.Element {
+function SignUpForm(props: ILogInProps): JSX.Element {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [repeatPassword, setRepeatPassword] = useState("")
@@ -9,11 +12,24 @@ function SignUpForm(): JSX.Element {
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault()
-        console.log(email)
-        console.log(password)
-        console.log(repeatPassword)
+        const user = new User(email, password)
+
+        await axios.post("http://localhost:8080/users/add", user)
+            .then(() => {
+                props.setIsLoggedIn(true)
+                props.setUser(user)
+                navigate("/")
+            })
+            .catch((e) => console.log(e))
+
         navigate("/")
     }
+
+    useEffect(() => {
+        if (props.isLoggedIn) {
+            navigate("/")
+        }
+    })
 
     return <form onSubmit={handleSubmit}>
         <div className="mb-3">

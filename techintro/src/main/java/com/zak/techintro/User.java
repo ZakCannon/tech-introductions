@@ -4,46 +4,33 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
     private Integer id;
 
+    @Getter
+    @Setter
     private String name;
 
+    @Getter
+    @Setter
     private String email;
 
-    public String token;
+    @Getter
+    @Setter
+    public String password;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setToken(String token) {this.token = token;}
+    public User() {}
 
     @Override
     public int hashCode() {

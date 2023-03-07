@@ -1,9 +1,10 @@
 import LoginForm from "../Components/LoginForm";
+import ILogInProps from "../Interfaces/ILogInProps";
 
-function LoginPage(): JSX.Element {
+function LoginPage(props: ILogInProps): JSX.Element {
     return <div>
         <h1>Log in</h1>
-        <LoginForm/>
+        <LoginForm isLoggedIn={props.isLoggedIn} setIsLoggedIn={props.setIsLoggedIn} setUser={props.setUser}/>
     </div>
 }
 

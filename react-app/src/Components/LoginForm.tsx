@@ -1,26 +1,32 @@
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import AuthenticationService from "../Services/AuthenticationService";
+import axios from "axios";
+import User from "../Services/User";
+import ILogInProps from "../Interfaces/ILogInProps";
 
-function SignUpForm(): JSX.Element {
+function LogInForm(props: ILogInProps): JSX.Element {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const navigate = useNavigate()
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault()
-        await AuthenticationService
-            .executeBasicAuthenticationService(email, password)
+        const user = new User(email, password)
+
+        await axios.post("http://localhost:8080/users/login", user)
             .then(() => {
-                AuthenticationService.registerSuccessfulLogin(email, password)
+                props.setIsLoggedIn(true)
+                props.setUser(user)
                 navigate("/")
             })
-            .catch((e) => {
-                console.log("Oh no")
-                console.log(e)
-            })
-
+            .catch((e) => console.log(e))
     }
+
+    useEffect(() => {
+        if (props.isLoggedIn) {
+            navigate("/")
+        }
+    })
 
     return <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -37,4 +43,4 @@ function SignUpForm(): JSX.Element {
     </form>
 }
 
-export default SignUpForm
+export default LogInForm

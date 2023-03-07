@@ -8,7 +8,9 @@
     "start": "node src/index.js",
     "csv_read": "node src/csv_read.js",
     "unicode": "node src/http_request_unicode.js",
-    "bad_types": "node src/bad_types.js"
+    "bad_types": "node src/bad_types.js",
+    "this": "node src/binding_this.js",
+    "this_classes": "node src/this_classes.js"
   },
   "author": "",
   "license": "ISC",
