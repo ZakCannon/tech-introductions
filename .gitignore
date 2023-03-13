@@ -53,3 +53,7 @@ tech-intro/build/
 tech-intro/!**/src/main/**/build/
 tech-intro/!**/src/test/**/build/
 techintro/target/*
+
+# exercies
+exercises/node_modules
+exercises/dist
