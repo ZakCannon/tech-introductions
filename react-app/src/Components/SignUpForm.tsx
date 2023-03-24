@@ -1,6 +1,5 @@
-import {FormEvent, useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import axios from "axios";
+import {FormEvent, useState} from "react";
+import axios, {AxiosError} from "axios";
 import User from "../Services/User";
 import ILogInProps from "../Interfaces/ILogInProps";
 
@@ -8,28 +7,29 @@ function SignUpForm(props: ILogInProps): JSX.Element {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [repeatPassword, setRepeatPassword] = useState("")
-    const navigate = useNavigate()
+    const [errorComponent, setErrorComponent] = useState(<></>)
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault()
-        const user = new User(email, password)
+        if (password != repeatPassword) {
+            setErrorComponent(passwordNotRepeatedErrorComponent)
+        } else if (password.length < 5) {
+            setErrorComponent(passwordTooShortErrorComponent)
+        } else {
+            const user = new User(email, password)
 
-        await axios.post("http://localhost:8080/users/add", user)
-            .then(() => {
-                props.setIsLoggedIn(true)
-                props.setUser(user)
-                navigate("/")
-            })
-            .catch((e) => console.log(e))
-
-        navigate("/")
+            await axios.post("http://localhost:8080/users/add", user)
+                .then(() => {
+                    props.setIsLoggedIn(true)
+                    props.setUser(user)
+                })
+                .catch((e) => setErrorComponent(userExistsErrorComponent))
+        }
     }
 
-    useEffect(() => {
-        if (props.isLoggedIn) {
-            navigate("/")
-        }
-    })
+    const userExistsErrorComponent = <div className="text-danger">User already exists with email {email}</div>
+    const passwordNotRepeatedErrorComponent = <div className="text-danger">Password not repeated</div>
+    const passwordTooShortErrorComponent = <div className="text-danger">Password must be at least 5 characters</div>
 
     return <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -48,6 +48,7 @@ function SignUpForm(props: ILogInProps): JSX.Element {
                    onChange={(e) => setRepeatPassword(e.target.value)}/>
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
+        {errorComponent}
     </form>
 }
 
