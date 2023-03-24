@@ -11,3 +11,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.board-row {
+  height: 30px;
+  margin: 1px;
+}
+
+.empty-cell {
+  background-color: green;
+  display: inline-block;
+  width: 30px;
+  aspect-ratio: 1;
+  border: grey;
+  margin: 1px;
+}
+
+.occupied-cell {
+  background-color: red;
+  display: inline-block;
+  width: 30px;
+  aspect-ratio: 1;
+  border: grey;
+  margin: 1px;
+}
