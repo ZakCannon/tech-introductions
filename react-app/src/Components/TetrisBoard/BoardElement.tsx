@@ -1,67 +1,75 @@
 import {useEffect, useState} from "react";
-import useInterval from "../../Services/useInterval";
-import {IPosition, Shape, randomShape} from "./shapeFactory";
+import {IPosition, Shape, randomShape, Point} from "./shapeFactory";
 import {Board} from "./Board";
-
 
 const NUM_ROWS = 20
 const NUM_COLS = 10
-// const INITIAL_BOARD_STATE = new Array(NUM_ROWS).fill(new Array(NUM_COLS).fill(false))
 
 function BoardElement(): JSX.Element {
-    const topOfBoard: IPosition = {x:Math.floor(NUM_COLS/2),y:NUM_ROWS}
+    const topOfBoard = new Point(NUM_COLS/2 - 1, NUM_ROWS)
 
-    const [occupiedPositions, setOccupiedPositions] = useState<Array<IPosition>>([])
+    const [activePositions, setActivePositions] = useState<Array<Point>>([])
+    const [occupiedPositions, setOccupiedPositions] = useState<Array<Point>>([])
     const [currentShape, setCurrentShape] = useState<Shape>(randomShape())
-    const [currentPosition, setCurrentPosition] = useState<IPosition>(topOfBoard)
     const [currentBoard, setCurrentBoard] = useState(new Board(NUM_ROWS, NUM_COLS))
 
-    const newShape = randomShape()
-
-    useInterval(tick, 1000)
-
-    function tick() {
-        if (currentPosition.y == 0) {
-            setCurrentPosition(topOfBoard)
-            setCurrentShape(randomShape())
-        }
-
-
-        const newPosition = {x:currentPosition.x, y:currentPosition.y-1}
-
-        const newOccupiedPositions: Array<IPosition> = currentShape?.fillsCells?.map((shapeOffsetPosition) => {
-                return {
-                    x: shapeOffsetPosition.x + newPosition.x,
-                    y: shapeOffsetPosition.y + newPosition.y
-                }
-        })
-
-        const newValidOccupiedPositions = newOccupiedPositions.filter((position) => {
-            return currentBoard.isCellInBoard(position.x, position.y)
-        })
-
-        newValidOccupiedPositions.push(...occupiedPositions)
-
+    function initialiseNewRandomShape() {
+        setCurrentShape(randomShape())
         const newBoard = new Board(NUM_ROWS, NUM_COLS)
 
-        newValidOccupiedPositions.map((occupiedPosition) => newBoard.fillCell(occupiedPosition))
+        const positionsToFill = occupiedPositions.concat(activePositions)
+        positionsToFill.map((cell) => newBoard.fillCell(cell))
 
-        setCurrentPosition(newPosition)
-        console.log(newPosition)
-        console.log("Hello?")
-        setOccupiedPositions(newValidOccupiedPositions)
+        const newActivePositions: Array<Point> = currentShape?.fillsCells?.map((shapeOffsetPosition) => {
+            return new Point(
+                shapeOffsetPosition.x + topOfBoard.x,
+                shapeOffsetPosition.y + topOfBoard.y
+            )
+        })
+
+        setOccupiedPositions(positionsToFill)
+        setActivePositions(newActivePositions)
         setCurrentBoard(newBoard)
-
-        // const newOccupiedSquares =
-
-
-        // const newBoardState = new Array(NUM_ROWS).fill(0).map(() => new Array(NUM_COLS).fill(0).map(() => Math.random() < 0.5))
-        // setOccupiedSquares(newBoardState)
     }
-    //
-    // // function getNewOccupiedSquares(newPosition: IPosition): Array<IPosition> {
-    // //     // return currentShape?.shape?.map((position: IPosition) => {x: position.x + newPosition.x, y: })
-    // // }
+
+    function getAllCellsLandingStates(): Array<boolean> {
+        return activePositions.map((activePosition) => {
+            const nextPosition = activePosition.drop()
+
+            return occupiedPositions.map((occupiedPosition) => {
+                return occupiedPosition.equals(nextPosition)
+            }).includes(true) || nextPosition.y < 0
+        })
+    }
+
+    useEffect(() => {
+        initialiseNewRandomShape()
+    }, [])
+
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            const allCellsLandingStates = getAllCellsLandingStates()
+
+            if (allCellsLandingStates.includes(true)) {
+                initialiseNewRandomShape()
+            } else {
+                const newActivePositions: Array<Point> = activePositions.map((activePosition) => {
+                    return activePosition.drop()
+                })
+
+                const newBoard = new Board(NUM_ROWS, NUM_COLS)
+
+                occupiedPositions.map((position) => newBoard.fillCell(position))
+                newActivePositions.map((position) => newBoard.activateCell(position))
+
+                setActivePositions(newActivePositions)
+                setCurrentBoard(newBoard)
+            }
+        }, 100)
+
+        return () => clearInterval(intervalId)
+    }, )
 
     return <div>
         <div>This is a board</div>

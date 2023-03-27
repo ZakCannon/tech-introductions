@@ -16,22 +16,25 @@ export class Board {
     }
 
     public fillCell(positionToFill: IPosition) {
-        const rowToFill = positionToFill.y
-        const cellToFill = positionToFill.x
+        if (this.isCellInBoard(positionToFill.y, positionToFill.x)) {
+            this.rows[positionToFill.y].cells[positionToFill.x].fill()
+        }
+    }
 
-        console.log(`Filling ${rowToFill}, ${cellToFill}`)
-
-        this.rows[rowToFill].cells[cellToFill].fill()
+    public activateCell(positionToActivate: IPosition) {
+        if (this.isCellInBoard(positionToActivate.y, positionToActivate.x)) {
+            this.rows[positionToActivate.y].cells[positionToActivate.x].activate()
+        }
     }
 
     public toElement(): JSX.Element {
         return <div>
-            {this.rows.map((row) => row.toElement())}
+            {this.rows.map((row) => row.toElement()).reverse()}
         </div>
     }
 
     public isCellInBoard(row: number, col: number): boolean {
-        return (row <= this.num_rows && col <= this.num_cols)
+        return (0 <= row && row < this.num_rows  && 0 <= col && col <= this.num_cols-1)
     }
 }
 
@@ -41,13 +44,17 @@ class Row {
     private key: number;
 
     constructor(num_cells: number, key: number) {
-        this.cells = new Array(num_cells).fill(0).map((_, index) => new Cell(false, key*10 + index))
+        this.cells = new Array(num_cells).fill(0).map((_, index) => new Cell(cellStates.Empty, key*10 + index))
         this.num_cells = num_cells
         this.key=key
     }
 
     public empty() {
         this.cells.map((cell) => cell.empty())
+    }
+
+    public deactivate() {
+        this.cells.map((cell) => cell.deactivate())
     }
 
     public toElement(): JSX.Element {
@@ -58,23 +65,53 @@ class Row {
 }
 
 class Cell {
-    private isOccupied: boolean;
+    private cellState: Symbol;
     private key: number;
 
-    constructor(isOccupied: boolean, key: number) {
-        this.isOccupied = isOccupied
+    constructor(cellState: Symbol, key: number) {
+        this.cellState = cellState
         this.key = key
     }
 
     public fill() {
-        this.isOccupied = true
+        this.cellState = cellStates.Occupied
     }
 
     public empty() {
-        this.isOccupied = false
+        this.cellState = cellStates.Empty
+    }
+
+    public activate() {
+        this.cellState = cellStates.Active
+    }
+
+    public deactivate() {
+        if (this.cellState == cellStates.Active) {
+            this.cellState = cellStates.Empty
+        }
     }
 
     public toElement(): JSX.Element {
-        return <div className={this.isOccupied ? "occupied-cell" : "empty-cell"} key={this.key}></div>
+        let cellStateStyling
+        switch (this.cellState) {
+            case cellStates.Occupied:
+                cellStateStyling = "occupied-cell"
+                break;
+            case cellStates.Active:
+                cellStateStyling = "active-cell"
+                break;
+            case cellStates.Empty:
+                cellStateStyling = "empty-cell"
+                break;
+        }
+
+
+        return <div className={`cell ${cellStateStyling}`} key={this.key}></div>
     }
 }
+
+const cellStates = Object.freeze({
+    Occupied: Symbol("occupied"),
+    Active: Symbol("active"),
+    Empty: Symbol("empty")
+})

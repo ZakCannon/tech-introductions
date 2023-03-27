@@ -3,23 +3,79 @@ export interface IPosition {
     y: number
 }
 
-export class Shape {
-    public fillsCells: Array<IPosition>
+export class Point {
+    public x: number
+    public y: number
 
-    constructor(fillsCells: Array<IPosition>) {
+    constructor(x: number, y: number) {
+        this.x = x
+        this.y = y
+    }
+
+    public drop(): Point {
+        return new Point(this.x, this.y - 1)
+    }
+
+    public equals(other: Point): boolean {
+        return this.x == other.x && this.y == other.y
+    }
+}
+
+export class Shape {
+    public fillsCells: Array<Point>
+
+    constructor(fillsCells: Array<Point>) {
         this.fillsCells = fillsCells
     }
 }
 
+
+
 const PIECES: Array<Shape> = [
     new Shape(
         [
-            {x:0, y:0},
-            {x:0, y:1},
-            {x:1, y:0},
-            {x:1, y:1}
+            new Point(0, 0),
+            new Point(0, 1),
+            new Point(1, 0),
+            new Point(1, 1)
         ]
-    )
+    ),
+
+    new Shape(
+        [
+            new Point(0, 0),
+            new Point(0, 1),
+            new Point(0, 2),
+            new Point(0, 3)
+        ]
+    ),
+    new Shape(
+        [
+            new Point(0, 0),
+            new Point(1, 0),
+            new Point(2, 0),
+            new Point(1, 1)
+        ]
+    ),
+
+    new Shape(
+        [
+            new Point(0, 0),
+            new Point(1, 0),
+            new Point(2, 0),
+            new Point(2, 1)
+        ]
+    ),
+
+    new Shape(
+        [
+            new Point(0, 0),
+            new Point(1, 0),
+            new Point(2, 0),
+            new Point(0, 1)
+        ]
+    ),
+
 ]
 
 export function randomShape(): Shape {

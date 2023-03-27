@@ -17,8 +17,7 @@ code {
   margin: 1px;
 }
 
-.empty-cell {
-  background-color: green;
+.cell {
   display: inline-block;
   width: 30px;
   aspect-ratio: 1;
@@ -26,11 +25,14 @@ code {
   margin: 1px;
 }
 
+.empty-cell {
+  background-color: green;
+}
+
 .occupied-cell {
   background-color: red;
-  display: inline-block;
-  width: 30px;
-  aspect-ratio: 1;
-  border: grey;
-  margin: 1px;
+}
+
+.active-cell {
+  background-color: yellow;
 }
