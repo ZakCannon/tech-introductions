@@ -1,4 +1,5 @@
 import {IPosition} from "./shapeFactory";
+import {KeyboardEvent} from "react";
 
 export class Board {
     private rows: Array<Row>;
@@ -23,18 +24,22 @@ export class Board {
 
     public activateCell(positionToActivate: IPosition) {
         if (this.isCellInBoard(positionToActivate.y, positionToActivate.x)) {
-            this.rows[positionToActivate.y].cells[positionToActivate.x].activate()
+            if (positionToActivate.y >= this.num_rows) {
+                return
+            } else {
+                this.rows[positionToActivate.y].cells[positionToActivate.x].activate()
+            }
         }
     }
 
-    public toElement(): JSX.Element {
-        return <div>
+    public toElement(handleArrowKey: (event: KeyboardEvent<HTMLDivElement>) => void): JSX.Element {
+        return <div tabIndex={0} onKeyDown={(e) => handleArrowKey(e)}>
             {this.rows.map((row) => row.toElement()).reverse()}
         </div>
     }
 
     public isCellInBoard(row: number, col: number): boolean {
-        return (0 <= row && row < this.num_rows  && 0 <= col && col <= this.num_cols-1)
+        return (0 <= row && 0 <= col && col <= this.num_cols-1)
     }
 }
 

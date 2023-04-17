@@ -12,12 +12,12 @@ export class Point {
         this.y = y
     }
 
-    public drop(): Point {
-        return new Point(this.x, this.y - 1)
+    public move(x: number, y: number): Point {
+        return new Point(this.x + x, this.y + y)
     }
 
     public equals(other: Point): boolean {
-        return this.x == other.x && this.y == other.y
+        return this.x === other.x && this.y === other.y
     }
 }
 
