@@ -23,9 +23,11 @@ export class Point {
 
 export class Shape {
     public fillsCells: Array<Point>
+    public name: String
 
-    constructor(fillsCells: Array<Point>) {
+    constructor(fillsCells: Array<Point>, name: String) {
         this.fillsCells = fillsCells
+        this.name = name
     }
 }
 
@@ -38,7 +40,8 @@ const PIECES: Array<Shape> = [
             new Point(0, 1),
             new Point(1, 0),
             new Point(1, 1)
-        ]
+        ],
+        "square"
     ),
 
     new Shape(
@@ -47,7 +50,8 @@ const PIECES: Array<Shape> = [
             new Point(0, 1),
             new Point(0, 2),
             new Point(0, 3)
-        ]
+        ],
+        "line"
     ),
     new Shape(
         [
@@ -55,7 +59,8 @@ const PIECES: Array<Shape> = [
             new Point(1, 0),
             new Point(2, 0),
             new Point(1, 1)
-        ]
+        ],
+        "t"
     ),
 
     new Shape(
@@ -64,7 +69,8 @@ const PIECES: Array<Shape> = [
             new Point(1, 0),
             new Point(2, 0),
             new Point(2, 1)
-        ]
+        ],
+        "l-1"
     ),
 
     new Shape(
@@ -73,7 +79,8 @@ const PIECES: Array<Shape> = [
             new Point(1, 0),
             new Point(2, 0),
             new Point(0, 1)
-        ]
+        ],
+        "l-2"
     ),
 
 ]
