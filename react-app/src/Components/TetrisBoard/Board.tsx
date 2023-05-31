@@ -3,8 +3,8 @@ import {KeyboardEvent} from "react";
 
 export class Board {
     private rows: Array<Row>;
-    private num_rows: number;
-    private num_cols: number;
+    private readonly num_rows: number;
+    private readonly num_cols: number;
 
     constructor(num_rows: number, num_cols: number) {
         this.rows = new Array(num_rows).fill(0).map((_, index) => new Row(num_cols, index))
@@ -46,7 +46,7 @@ export class Board {
 class Row {
     public cells: Array<Cell>;
     private num_cells: number;
-    private key: number;
+    private readonly key: number;
 
     constructor(num_cells: number, key: number) {
         this.cells = new Array(num_cells).fill(0).map((_, index) => new Cell(cellStates.Empty, key*10 + index))
@@ -58,8 +58,8 @@ class Row {
         this.cells.map((cell) => cell.empty())
     }
 
-    public deactivate() {
-        this.cells.map((cell) => cell.deactivate())
+    public isFull(): Boolean {
+        return this.cells.every(cell => cell.cellState == cellStates.Occupied)
     }
 
     public toElement(): JSX.Element {
@@ -70,8 +70,8 @@ class Row {
 }
 
 class Cell {
-    private cellState: Symbol;
-    private key: number;
+    cellState: Symbol;
+    private readonly key: number;
 
     constructor(cellState: Symbol, key: number) {
         this.cellState = cellState

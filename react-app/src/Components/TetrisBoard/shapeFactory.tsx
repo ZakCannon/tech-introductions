@@ -19,6 +19,21 @@ export class Point {
     public equals(other: Point): boolean {
         return this.x === other.x && this.y === other.y
     }
+
+    public add(other: Point): Point {
+        return new Point(this.x + other.x, this.y + other.y)
+    }
+
+    public subtract(other: Point): Point {
+        return new Point(this.x - other.x, this.y - other.y)
+    }
+
+    public rotateAbout(aboutCentre: Point): Point {
+        const pointRelativeToCentre = this.subtract(aboutCentre)
+        const pointRotatedAboutOrigin = new Point(pointRelativeToCentre.y, -pointRelativeToCentre.x)
+
+        return pointRotatedAboutOrigin.add(aboutCentre)
+    }
 }
 
 export class Shape {
@@ -26,6 +41,12 @@ export class Shape {
 
     constructor(fillsCells: Array<Point>) {
         this.fillsCells = fillsCells
+    }
+
+    public rotate(): Shape {
+        const abstractCentre = new Point(0, 0)
+        const newPoints = this.fillsCells.map((x) => x.rotateAbout(abstractCentre))
+        return new Shape(newPoints)
     }
 }
 
@@ -43,36 +64,36 @@ const PIECES: Array<Shape> = [
 
     new Shape(
         [
+            new Point(0, -1),
             new Point(0, 0),
             new Point(0, 1),
-            new Point(0, 2),
-            new Point(0, 3)
+            new Point(0, 2)
         ]
     ),
     new Shape(
         [
+            new Point(-1, 0),
             new Point(0, 0),
             new Point(1, 0),
-            new Point(2, 0),
+            new Point(0, 1)
+        ]
+    ),
+
+    new Shape(
+        [
+            new Point(-1, 0),
+            new Point(0, 0),
+            new Point(1, 0),
             new Point(1, 1)
         ]
     ),
 
     new Shape(
         [
+            new Point(-1, 0),
             new Point(0, 0),
             new Point(1, 0),
-            new Point(2, 0),
-            new Point(2, 1)
-        ]
-    ),
-
-    new Shape(
-        [
-            new Point(0, 0),
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(0, 1)
+            new Point(-1, 1)
         ]
     ),
 
