@@ -11,10 +11,12 @@
     "bad_types": "node src/bad_types.js",
     "this": "node src/binding_this.js",
     "this_classes": "node src/this_classes.js",
-    "dev": "gulp dev"
+    "dev": "gulp dev",
+    "sudoku": "ts-node src/sudoku.ts"
   },
   "author": "",
   "license": "ISC",
+  "engines" : { "node" : ">14" },
   "dependencies": {
     "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
@@ -28,6 +30,7 @@
     "papaparse": "^5.3.2",
     "sharp": "^0.30.7",
     "ts-loader": "^9.4.2",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
   }
 }
